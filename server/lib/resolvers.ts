@@ -1,13 +1,12 @@
-import { model, Query } from 'mongoose';
 import * as DataSources from './datasources'
 import { IUser } from './datasources/user';
+
 interface Context {
   dataSources: typeof DataSources
   authorization: string,
   user: IUser
 }
-type Resolver = (_:any, params: any, context: Context) => any
-type Keys = 'Query' | 'Mutation'
+type Resolver = (_:any, params: { [key: string]: any }, context: Context) => any
 interface Resolvers {
   Query: {
     [key:string] : Resolver
@@ -16,6 +15,7 @@ interface Resolvers {
     [key:string] : Resolver
   },
 }
+
 const resolvers: Resolvers = {
   Query: {
     user: async (_, params, { dataSources, authorization, user }) => {

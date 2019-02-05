@@ -17,11 +17,6 @@ const UserModel : Model<IUser> = model('user', schema)
 
 class User extends DataSource {
   model = UserModel
-  async findById () {
-    return UserModel.find({ nickname: /if/ }).exec().then(docs => {
-      return docs.length > 0 ? docs[0] : null
-    })
-  }
 }
 
 const _instance = new User()

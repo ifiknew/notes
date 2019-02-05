@@ -6,8 +6,9 @@
   "scripts": {
     "build": "./node_modules/.bin/babel lib -d dist --extensions .js,.ts",
     "watch": "./node_modules/.bin/babel lib -w -d dist --extensions .js,.ts",
-    "start": "npm run build && node dist/index.js",
-    "dev": "nodemon --watch lib --ext js,ts --exec npm run start"
+    "start": "npm run build && npm run serve",
+    "dev": "nodemon --watch lib --ext js,ts --exec npm run start",
+    "serve": "node dist/index.js"
   },
   "author": "",
   "license": "ISC",
