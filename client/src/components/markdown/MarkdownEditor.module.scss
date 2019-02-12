@@ -1,0 +1,21 @@
+.root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  & > * {
+    flex: 0 0 50%;
+    height: 100%;
+
+  }
+  :global(.CodeMirror) {
+    height: 100%;
+    padding: 16px;
+    pre {
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    }
+  }
+  .viewer {
+    overflow: scroll;
+    margin-left: 16px;
+  }
+}

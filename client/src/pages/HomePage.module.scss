@@ -11,6 +11,19 @@
     .searchBar {
       flex: 1;
     }
+    .logo {
+      color: rgba(0, 0, 0, 0.87);
+      letter-spacing: 2px;
+      padding-left: 16px;
+      box-sizing: border-box;
+      font-size: 24px;
+      & > span:first-of-type {
+        background-color: #db5947;
+        font-weight: 600;
+        padding: 4px 2px 4px 4px;
+        margin-right: 2px;
+      }
+    }
   }
   .body {
     height: calc(100% - 60px);
@@ -38,7 +51,7 @@
     border-radius: 0 100px 100px 0;
     .text {
       span {
-        font-weight: 500;
+        font-weight: 400;
       }
     }
     &.active {
@@ -55,4 +68,12 @@
       }
     }
   }
+}
+.markdownWrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2048;
 }
