@@ -1,0 +1,58 @@
+.root {
+  height: 100vh;
+  width: 100vw;
+  .header {
+    display: flex;
+    height: 60px;
+    align-items: center;
+    .logo, .toolGroup {
+      flex: 0 0 300px;
+    }
+    .searchBar {
+      flex: 1;
+    }
+  }
+  .body {
+    height: calc(100% - 60px);
+    display: flex;
+    .side {
+      flex: 0 0 256px;
+      padding-right: 56px;
+      position: relative;
+    }
+    .content {
+      flex: 1;
+    }
+  }
+}
+.createWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 24;
+}
+.menu {
+  width: 100%;
+  height: 100%;
+  .menuItem {
+    border-radius: 0 100px 100px 0;
+    .text {
+      span {
+        font-weight: 500;
+      }
+    }
+    &.active {
+      background-color: #faeeeb;
+      .icon {
+        svg {
+          fill: #db5947;
+        }
+      }
+      .text {
+        span {
+          color: #db5947;
+        }
+      }
+    }
+  }
+}
