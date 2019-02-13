@@ -1,0 +1,26 @@
+.note {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  overflow: hidden;
+  height: 48px;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .content {
+    flex: 1 1 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .time {
+    flex: 0 0 100px;
+    font-size: 15px;
+    margin-left: 8px;
+    text-align: right;
+  }
+}
+.root {
+  padding: 12px 40px 12px 0px;
+}

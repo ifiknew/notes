@@ -7,15 +7,39 @@ import 'codemirror/theme/material.css'
 
 export interface MarkdownEditorProps {
   value: string,
-  onChange: (value: string) => void
+  onChange?: (value: string) => void
+  onEscape?: () => void
+  readOnly?: boolean
 }
 
 export default class MarkdownEditor extends React.Component<MarkdownEditorProps, any> {
+  private viewer: HTMLDivElement | null = null
+  static defaultProps = {
+    readOnly: false
+  }
+  componentDidMount() {
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        if (this.props.onEscape) {
+          this.props.onEscape()
+        }
+      }
+    })
+  }
+  public getTextInfo = () => {
+    if (this.viewer == null) { return {} }
+    const text = this.viewer.innerText
+    return {
+      text,
+      title: text.split(/\n/)[0],
+      content: this.props.value
+    }
+  }
   public render() {
     return (
-      <div className={styles.root}>
+      <div className={`${styles.root} ${this.props.readOnly ? styles.readOnly : ''}`}>
         <CodeMirror value={this.props.value} onChange={this.props.onChange} options={{ theme: 'material' }}/>
-        <div className={styles.viewer}>
+        <div className={styles.viewer} ref={viewer => this.viewer = viewer}>
           <MarkdownViewer source={this.props.value} skipHtml={true} />
         </div>
       </div>

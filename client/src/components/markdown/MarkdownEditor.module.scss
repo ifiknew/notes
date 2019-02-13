@@ -7,6 +7,15 @@
     height: 100%;
 
   }
+  &.readOnly > * {
+    flex: 0 0 100%;
+  }
+  &.readOnly :global(.ReactCodeMirror) {
+    display: none;
+  }
+  :global(.ReactCodeMirror) {
+    overflow: auto;
+  }
   :global(.CodeMirror) {
     height: 100%;
     padding: 16px;
@@ -16,6 +25,7 @@
   }
   .viewer {
     overflow: scroll;
-    margin-left: 16px;
+    padding-left: 16px;
+    background-color: #fff;
   }
 }

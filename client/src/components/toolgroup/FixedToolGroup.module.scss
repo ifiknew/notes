@@ -1,0 +1,12 @@
+.root {
+  position: fixed;
+  bottom: -50px;
+  left: 0;
+  z-index: 24;
+  padding-top: 50px;
+  transition: all .3s;
+  min-width: 200px;
+  &:hover {
+    bottom: 0;
+  }
+}
