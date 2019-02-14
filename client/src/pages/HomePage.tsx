@@ -1,8 +1,8 @@
 import * as React from 'react'
 import styles from './HomePage.module.scss'
 import { Switch, Route, withRouter, RouteComponentProps } from 'react-router-dom'
-import { MenuList, MenuItem, ListItemIcon, ListItemText, IconButton } from '@material-ui/core'
-import { EventNoteRounded, Public, StarBorderRounded, AddRounded, CancelRounded, SaveRounded, AccountCircleOutlined } from '@material-ui/icons'
+import { MenuList, MenuItem, ListItemIcon, ListItemText, IconButton, Avatar, Input, InputAdornment } from '@material-ui/core'
+import { EventNoteRounded, Public, StarBorderRounded, AddRounded, CancelRounded, SaveRounded, AccountCircleOutlined, SettingsRounded, SettingsOutlined, Apps, Search } from '@material-ui/icons'
 import MarkdownEditor from '../components/markdown/MarkdownEditor';
 import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -10,6 +10,8 @@ import NotesPage from './notes/NotesPage';
 import FixedToolGroup from '../components/toolgroup/FixedToolGroup';
 import NoteDetail from './notes/NoteDetail';
 import LoginDialog from './LoginDialog';
+import { deepOrange } from '@material-ui/core/colors';
+import client from '../apollo/client';
 
 const MENUS = ['Notes', 'Browser', 'Starred']
 const MENU_ICONS = [<EventNoteRounded />, <Public />, <StarBorderRounded />]
@@ -101,10 +103,18 @@ class HomePage extends React.Component<HomePageProps & RouteComponentProps<{}>, 
     return (
       <div className={styles.root}>
         <div className={styles.header}>
-          <div className={styles.logo}><span>N</span><span>otes</span></div>
+          <div className={styles.logo}><span style={{ background: deepOrange[500] }}>N</span><span>otes</span></div>
           <div className={styles.searchBar}>
-            {/* <Search />
-            <Input placeholder="search"/> */}
+            <Input
+              className={styles.input}
+              fullWidth
+              placeholder="Search"
+              startAdornment={(
+                <InputAdornment position="start" style={{ padding: '0 8px' }}>
+                  <Search style={{ fill: 'rgba(0,0,0,0.12)' }}/>
+                </InputAdornment>
+              )}
+            />
           </div>
           <div className={styles.toolGroup}>
             <Query
@@ -112,13 +122,21 @@ class HomePage extends React.Component<HomePageProps & RouteComponentProps<{}>, 
                 query user {
                   user {
                     id
-
+                    username
                   }
                 }
               `}
             >
               {({ data }) => data.user && data.user.id ? (
-                <div>logined</div>
+                <React.Fragment>
+                  <IconButton color="default">
+                    <SettingsRounded />
+                  </IconButton>
+                  <IconButton color="default">
+                    <Apps />
+                  </IconButton>
+                  <Avatar style={{ background: deepOrange[500] }}>{data.user.username.slice(0,1).toUpperCase()}</Avatar>
+                </React.Fragment>
               ) : (
                 <IconButton color="default" onClick={() => this.setState({ showLoginDialog: true })}>
                   <AccountCircleOutlined />

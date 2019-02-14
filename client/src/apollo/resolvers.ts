@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { async } from 'q';
 import client from './client';
 
 export const typeDefs = gql`

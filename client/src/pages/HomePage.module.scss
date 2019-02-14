@@ -10,6 +10,15 @@
     }
     .searchBar {
       flex: 1;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      .input, .input > input {
+        height: 40px;
+        &::before, &::after {
+          display: none;
+        }
+      }
     }
     .logo {
       color: rgba(0, 0, 0, 0.87);
@@ -18,14 +27,16 @@
       box-sizing: border-box;
       font-size: 24px;
       & > span:first-of-type {
-        background-color: #db5947;
         font-weight: 600;
         padding: 4px 2px 4px 4px;
         margin-right: 2px;
       }
     }
     .toolGroup {
-      text-align: right;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-right: 16px;
     }
   }
   .body {
@@ -33,7 +44,7 @@
     display: flex;
     .side {
       flex: 0 0 256px;
-      padding-right: 56px;
+      padding-right: 44px;
       position: relative;
     }
     .content {

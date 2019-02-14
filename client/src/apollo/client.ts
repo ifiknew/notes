@@ -3,7 +3,9 @@ import ApolloClient from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import gql from 'graphql-tag';
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  dataIdFromObject: (obj) => obj.id
+});
 const client = new ApolloClient({
   cache,
   uri: 'http://localhost:4000/graphql',
@@ -17,35 +19,34 @@ const client = new ApolloClient({
     typeDefs,
     cache,
     defaults
-  }
+  },
 });
-
-client.writeQuery({
-  query: gql`
-    query user {
-      user {
-        id
-      }
-    }
-  `,
-  data: {
-    user: {
-      id: localStorage.getItem('uid'),
-      __typename: 'User'
-    }
-  }
-})
-console.log(
-  client.readQuery({
-    query: gql`
-      query setting {
-        setting @client {
-          name
-          version
-        }
-      }
-    `
-  })
-)
+// client.writeQuery({
+//   query: gql`
+//     query user {
+//       user {
+//         id
+//       }
+//     }
+//   `,
+//   data: {
+//     user: {
+//       id: localStorage.getItem('uid'),
+//       __typename: 'User'
+//     }
+//   }
+// })
+// console.log(
+//   client.readQuery({
+//     query: gql`
+//       query setting {
+//         setting @client {
+//           name
+//           version
+//         }
+//       }
+//     `
+//   })
+// )
 
 export default client
