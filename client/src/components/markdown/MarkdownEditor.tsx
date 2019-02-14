@@ -38,7 +38,9 @@ export default class MarkdownEditor extends React.Component<MarkdownEditorProps,
   public render() {
     return (
       <div className={`${styles.root} ${this.props.readOnly ? styles.readOnly : ''}`}>
-        <CodeMirror value={this.props.value} onChange={this.props.onChange} options={{ theme: 'material' }}/>
+        {!this.props.readOnly && 
+          <CodeMirror value={this.props.value} onChange={this.props.onChange} options={{ theme: 'material' }}/>
+        }
         <div className={styles.viewer} ref={viewer => this.viewer = viewer}>
           <MarkdownViewer source={this.props.value} skipHtml={true} />
         </div>

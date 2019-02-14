@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styles from './HomePage.module.scss'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { MenuList, MenuItem, ListItemIcon, ListItemText, IconButton } from '@material-ui/core'
 import { EventNoteRounded, Public, StarBorderRounded, AddRounded, CancelRounded, SaveRounded } from '@material-ui/icons'
 import MarkdownEditor from '../components/markdown/MarkdownEditor';
@@ -86,12 +86,10 @@ export default class HomePage extends React.Component<HomePageProps, any> {
   }
   private renderContent = () => {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route path="/notes" exact><NotesPage /></Route>
-          <Route path="/notes/:id" exact><NoteDetail /></Route>
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <Route path="/notes" exact><NotesPage /></Route>
+        <Route path="/notes/:id" exact><NoteDetail /></Route>
+      </Switch>
     )
   }
   public render() {

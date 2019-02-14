@@ -6,6 +6,7 @@ import 'typeface-roboto'
 import './App.css'
 import { ApolloProvider } from 'react-apollo';
 import client from './apollo/client';
+import { BrowserRouter } from 'react-router-dom';
 
 const theme = createMuiTheme({
   spacing: { unit: 4 },
@@ -20,7 +21,9 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <MuiThemeProvider theme={theme}>
-          <HomePage />
+          <BrowserRouter>
+            <HomePage />
+          </BrowserRouter>
         </MuiThemeProvider>
       </ApolloProvider>
     )

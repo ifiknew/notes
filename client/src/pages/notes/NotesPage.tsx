@@ -2,6 +2,7 @@ import * as React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styles from './NotesPage.module.scss'
+import { withRouter, RouteComponentProps } from 'react-router';
 
 const MARKDOWN_LIST = gql`
   query mds {
@@ -16,7 +17,8 @@ const MARKDOWN_LIST = gql`
 export interface NotesPageProps {
 }
 class MarkdownQuery extends Query<{ markdowns: { id: string, title: string, content: string }[] }> {}
-export default class NotesPage extends React.Component<NotesPageProps, any> {
+
+class NotesPage extends React.Component<NotesPageProps & RouteComponentProps<{}>, any> {
   public render() {
     return (
       <MarkdownQuery
@@ -25,7 +27,12 @@ export default class NotesPage extends React.Component<NotesPageProps, any> {
         {({ data, loading }) => (data && data.markdowns) ? 
           <div className={styles.root}>
             {data.markdowns.map(md => (
-              <div className={styles.note} style={{color: 'rgba(0,0,0,.32)'}} key={md.id}>
+              <div 
+                className={styles.note} 
+                style={{color: 'rgba(0,0,0,.32)'}} 
+                key={md.id}
+                onClick={() => this.props.history.push(`/notes/${md.id}`)}
+              >
                 <span className={styles.content}>
                   <span style={{ fontWeight: 500, color: 'rgba(0,0,0,.87)' }}>{md.title}</span>
                   <span style={{ padding: '0 4px', color: 'rgba(0,0,0,.32)' }}>—</span>
@@ -40,3 +47,4 @@ export default class NotesPage extends React.Component<NotesPageProps, any> {
     );
   }
 }
+export default withRouter(NotesPage)
