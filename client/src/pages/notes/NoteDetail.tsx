@@ -55,12 +55,14 @@ class NoteDetail extends React.Component<NoteDetailProps & RouteComponentProps<{
                         mutation md($id:ID, $title:String, $content:String) {
                           markdown(id:$id, title:$title, content:$content) {
                             id
+                            title
+                            content
                           }
                         }
                       `}
                       onCompleted={() => {
                         this.setState({ isEdit: false, editContent: null })
-                        refetch()
+                        // refetch()
                       }}
                     >
                       {(mutate) => (

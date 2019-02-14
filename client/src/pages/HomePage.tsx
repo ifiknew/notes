@@ -1,14 +1,15 @@
 import * as React from 'react'
 import styles from './HomePage.module.scss'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, withRouter, RouteComponentProps } from 'react-router-dom'
 import { MenuList, MenuItem, ListItemIcon, ListItemText, IconButton } from '@material-ui/core'
-import { EventNoteRounded, Public, StarBorderRounded, AddRounded, CancelRounded, SaveRounded } from '@material-ui/icons'
+import { EventNoteRounded, Public, StarBorderRounded, AddRounded, CancelRounded, SaveRounded, AccountCircleOutlined } from '@material-ui/icons'
 import MarkdownEditor from '../components/markdown/MarkdownEditor';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import NotesPage from './notes/NotesPage';
 import FixedToolGroup from '../components/toolgroup/FixedToolGroup';
 import NoteDetail from './notes/NoteDetail';
+import LoginDialog from './LoginDialog';
 
 const MENUS = ['Notes', 'Browser', 'Starred']
 const MENU_ICONS = [<EventNoteRounded />, <Public />, <StarBorderRounded />]
@@ -21,12 +22,13 @@ const CREATE_MARKDOWN = gql`
     }
   }
 `
-export default class HomePage extends React.Component<HomePageProps, any> {
+class HomePage extends React.Component<HomePageProps & RouteComponentProps<{}>, any> {
   private md: MarkdownEditor | null = null
   state = {
     activeMenuIndex: 0,
     showMarkdownEditor: false,
-    md: ''
+    md: '',
+    showLoginDialog: false
   }
   private renderMenu = () => {
     return (
@@ -34,7 +36,10 @@ export default class HomePage extends React.Component<HomePageProps, any> {
         {MENUS.map((menuText, index) => (
           <MenuItem 
             className={`${styles.menuItem} ${this.state.activeMenuIndex === index && styles.active}`}
-            onClick={() => this.setState({ activeMenuIndex: index })}
+            onClick={() => {
+              this.setState({ activeMenuIndex: index })
+              this.props.history.push(`/${menuText.toLocaleLowerCase()}`)
+            }}
             key={menuText}
           >
             <ListItemIcon className={styles.icon}>
@@ -101,7 +106,26 @@ export default class HomePage extends React.Component<HomePageProps, any> {
             {/* <Search />
             <Input placeholder="search"/> */}
           </div>
-          <div className={styles.toolGroup}></div>
+          <div className={styles.toolGroup}>
+            <Query
+              query={gql`
+                query user {
+                  user {
+                    id
+
+                  }
+                }
+              `}
+            >
+              {({ data }) => data.user && data.user.id ? (
+                <div>logined</div>
+              ) : (
+                <IconButton color="default" onClick={() => this.setState({ showLoginDialog: true })}>
+                  <AccountCircleOutlined />
+                </IconButton>
+              )}
+            </Query>
+          </div>
         </div>
         <div className={styles.body}>
           <div className={styles.side}>
@@ -113,7 +137,13 @@ export default class HomePage extends React.Component<HomePageProps, any> {
         </div>
         {this.renderExternalToolGroup()}
         {this.state.showMarkdownEditor && this.renderMarkdown()}
+        <LoginDialog 
+          open={this.state.showLoginDialog}
+          onClose={() => this.setState({ showLoginDialog: false })}
+        />
       </div>
     );
   }
 }
+
+export default withRouter(HomePage)
