@@ -26,10 +26,12 @@
       padding-left: 16px;
       box-sizing: border-box;
       font-size: 24px;
+      font-weight: 500;
       & > span:first-of-type {
+        color: white;
         font-weight: 600;
         padding: 4px 2px 4px 4px;
-        margin-right: 2px;
+        margin-right: 6px;
       }
     }
     .toolGroup {
@@ -50,6 +52,7 @@
     .content {
       flex: 1;
       overflow: hidden;
+      padding-right: 40px;
     }
   }
 }

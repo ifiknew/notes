@@ -1,6 +1,7 @@
 import { connect, connection } from 'mongoose'
 import User from './user'
 import Markdown from './markdown'
+import Folder from './folder'
 connect('mongodb://127.0.0.1:27017/app', { useNewUrlParser: true })
 
 connection.on('error', async (err) => {
@@ -12,5 +13,6 @@ connection.once('open', () => {
 
 export {
  User,
- Markdown
+ Markdown,
+ Folder
 }

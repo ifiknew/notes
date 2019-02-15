@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styles from './NotesPage.module.scss'
 import { withRouter, RouteComponentProps } from 'react-router';
+import NoteItem from './NoteItem';
 
 const MARKDOWN_LIST = gql`
   query mds {
@@ -27,19 +28,11 @@ class NotesPage extends React.Component<NotesPageProps & RouteComponentProps<{}>
         {({ data, loading }) => (data && data.markdowns) ? 
           <div className={styles.root}>
             {data.markdowns.map(md => (
-              <div 
-                className={styles.note} 
-                style={{color: 'rgba(0,0,0,.32)'}} 
+              <NoteItem 
+                md={md}
                 key={md.id}
                 onClick={() => this.props.history.push(`/notes/${md.id}`)}
-              >
-                <span className={styles.content}>
-                  <span style={{ fontWeight: 500, color: 'rgba(0,0,0,.87)' }}>{md.title}</span>
-                  <span style={{ padding: '0 4px', color: 'rgba(0,0,0,.32)' }}>—</span>
-                  <span style={{ color: 'rgba(0,0,0,.32)' }}>{md.content}</span>
-                </span>
-                <span className={styles.time} style={{ color: 'rgba(0,0,0,.87)' }}>00:45 PM</span>
-              </div>
+              />
             ))}
           </div>
         : null}

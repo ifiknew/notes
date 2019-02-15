@@ -2,7 +2,7 @@ import * as React from 'react'
 import styles from './HomePage.module.scss'
 import { Switch, Route, withRouter, RouteComponentProps } from 'react-router-dom'
 import { MenuList, MenuItem, ListItemIcon, ListItemText, IconButton, Avatar, Input, InputAdornment } from '@material-ui/core'
-import { EventNoteRounded, Public, StarBorderRounded, AddRounded, CancelRounded, SaveRounded, AccountCircleOutlined, SettingsRounded, SettingsOutlined, Apps, Search } from '@material-ui/icons'
+import { EventNoteRounded, Public, StarBorderRounded, AddRounded, CancelRounded, SaveRounded, AccountCircleOutlined, SettingsRounded, SettingsOutlined, Apps, Search, FolderOpenOutlined } from '@material-ui/icons'
 import MarkdownEditor from '../components/markdown/MarkdownEditor';
 import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
@@ -11,10 +11,10 @@ import FixedToolGroup from '../components/toolgroup/FixedToolGroup';
 import NoteDetail from './notes/NoteDetail';
 import LoginDialog from './LoginDialog';
 import { deepOrange } from '@material-ui/core/colors';
-import client from '../apollo/client';
+import FoldersPage from './folders/FoldersPage';
 
-const MENUS = ['Notes', 'Browser', 'Starred']
-const MENU_ICONS = [<EventNoteRounded />, <Public />, <StarBorderRounded />]
+const MENUS = ['Notes', 'Folders','Browser', 'Starred']
+const MENU_ICONS = [<EventNoteRounded />, <FolderOpenOutlined />, <Public />, <StarBorderRounded />]
 export interface HomePageProps {
 }
 const CREATE_MARKDOWN = gql`
@@ -31,6 +31,12 @@ class HomePage extends React.Component<HomePageProps & RouteComponentProps<{}>, 
     showMarkdownEditor: false,
     md: '',
     showLoginDialog: false
+  }
+  static getDerivedStateFromProps = (nextProps: RouteComponentProps<{}>) => {
+    const pathname = nextProps.location.pathname
+    return {
+      activeMenuIndex: MENUS.findIndex(v => pathname.indexOf(v.toLocaleLowerCase()) === 1)
+    }
   }
   private renderMenu = () => {
     return (
@@ -96,6 +102,8 @@ class HomePage extends React.Component<HomePageProps & RouteComponentProps<{}>, 
       <Switch>
         <Route path="/notes" exact><NotesPage /></Route>
         <Route path="/notes/:id" exact><NoteDetail /></Route>
+        <Route path="/folders/notes/:id" exact><NoteDetail /></Route>
+        <Route path="/folders"><FoldersPage /></Route>
       </Switch>
     )
   }

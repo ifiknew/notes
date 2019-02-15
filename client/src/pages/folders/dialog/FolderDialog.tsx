@@ -8,17 +8,18 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import client from '../apollo/client';
+import client from '../../../apollo/client';
 
-export interface LoginDialogProps {
+
+export interface FolderDialogProps {
   onClose: () => void
-  open: boolean
+  open: boolean,
+  contextId?: string | null
 }
 
-export default class LoginDialog extends React.Component<LoginDialogProps, any> {
+export default class FolderDialog extends React.Component<FolderDialogProps, any> {
   state = {
-    username: '',
-    password: ''
+    name: '',
   }
   private onChange = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ [key]: e.target.value })
   public render() {
@@ -28,25 +29,18 @@ export default class LoginDialog extends React.Component<LoginDialogProps, any> 
         onClose={this.props.onClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Login</DialogTitle>
+        <DialogTitle id="form-dialog-title">Folder</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To visit Notes for your own, login by username and password.
+            Create a folder with name
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label="username"
+            label="name"
             type="text"
             fullWidth
-            onChange={this.onChange('username')}
-          />
-          <TextField
-            margin="dense"
-            label="password"
-            type="password"
-            fullWidth
-            onChange={this.onChange('password')}
+            onChange={this.onChange('name')}
           />
         </DialogContent>
         <DialogActions>
@@ -55,33 +49,35 @@ export default class LoginDialog extends React.Component<LoginDialogProps, any> 
           </Button>
           <Mutation
             mutation={gql`
-              mutation login($username:String!, $password: String!) {
-                login(username: $username, password: $password) {
+              mutation folder($name:String!, $parentId: ID) {
+                folder(name: $name, parentId: $parentId) {
                   id
+                  parentId
                 }
               }
             `}
-            onCompleted={(data) => {
-              localStorage.setItem('uid', data.login.id)
-              location.reload()
+            onCompleted={() => {
               this.props.onClose()
-              client.writeQuery({
-                query: gql`
-                  query user {
-                    user {
+            }}
+            refetchQueries={[{
+              query: gql`
+                query folder($id:ID) {
+                  folder(id:$id) {
+                    folders {
                       id
+                      name
                     }
                   }
-                `,
-                data: {
-                  user: data.login
                 }
-              })
-            }}
+              `,
+              variables: {
+                id: this.props.contextId
+              }
+            }]}
           >
             {(mutate) => (
-              <Button onClick={() => mutate({ variables: this.state })} color="primary">
-                Login
+              <Button onClick={() => mutate({ variables: {...this.state, parentId: this.props.contextId  } })} color="primary">
+                Create
               </Button>
             )}
           </Mutation>

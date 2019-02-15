@@ -10,18 +10,30 @@ const typeDefs = gql`
     id: ID!
     title: String!
     content: String!
+    createTime: String!
+    updateTime: String
+  }
+  type Folder {
+    id: ID!
+    name: String!
+    parentId: ID
+    folders: [Folder]
+    markdowns: [Markdown]
   }
 
   type Query {
     user: User
     markdowns: [Markdown]
+    markdown(id: ID): Markdown
+    folder(id: ID): Folder
   }
 
   type Mutation {
-    login(username: String!, password: String!): ID
+    login(username: String!, password: String!): User
 
     user(id: ID, username: String!, password: String!, nickname: String!): User
     markdown(id: ID, title: String, content: String): Markdown
+    folder(id: ID, name: String, parentId: ID): Folder
   }
 `
 
