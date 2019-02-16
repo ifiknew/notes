@@ -10,7 +10,8 @@ const MARKDOWN_LIST = gql`
     markdowns {
       id
       title
-      content
+      text
+      updateTime
     }
   }
 `

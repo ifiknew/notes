@@ -29,9 +29,10 @@ export default class MarkdownEditor extends React.Component<MarkdownEditorProps,
   public getTextInfo = () => {
     if (this.viewer == null) { return {} }
     const text = this.viewer.innerText
+    const splits = text.split(/\n/)
     return {
-      text,
-      title: text.split(/\n/)[0],
+      text: splits.slice(1).join(' '),
+      title: splits[0],
       content: this.props.value
     }
   }

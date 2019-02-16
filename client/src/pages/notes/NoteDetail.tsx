@@ -52,17 +52,17 @@ class NoteDetail extends React.Component<NoteDetailProps & RouteComponentProps<{
                     </IconButton>
                     <Mutation
                       mutation={gql`
-                        mutation md($id:ID, $title:String, $content:String) {
-                          markdown(id:$id, title:$title, content:$content) {
+                        mutation md($id:ID, $title:String, $content:String, $text: String) {
+                          markdown(id:$id, title:$title, content:$content, text: $text) {
                             id
                             title
                             content
+                            text
                           }
                         }
                       `}
                       onCompleted={() => {
                         this.setState({ isEdit: false, editContent: null })
-                        // refetch()
                       }}
                     >
                       {(mutate) => (

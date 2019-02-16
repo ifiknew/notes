@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import HomePage from './pages/HomePage';
-import { red } from '@material-ui/core/colors';
+import { red, deepOrange } from '@material-ui/core/colors';
 import 'typeface-roboto'
 import './App.css'
 import { ApolloProvider } from 'react-apollo';
@@ -11,7 +11,7 @@ import { BrowserRouter } from 'react-router-dom';
 const theme = createMuiTheme({
   spacing: { unit: 4 },
   palette: {
-    primary: red,
+    primary: deepOrange,
     secondary: red
   }
 })

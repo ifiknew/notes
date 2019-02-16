@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% + 40px);
+  border-bottom: 2px solid #ffc9c1;
+  box-shadow: 6px 1px 3px 0px #ffc9c1;
+  margin-bottom: 12px;
+  & > div {
+    display: flex;
+    align-items: center;
+  }
+}

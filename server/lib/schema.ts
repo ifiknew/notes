@@ -10,11 +10,13 @@ const typeDefs = gql`
     id: ID!
     title: String!
     content: String!
+    text: String
     createTime: String!
     updateTime: String
+    folderId: ID
   }
   type Folder {
-    id: ID!
+    id: ID
     name: String!
     parentId: ID
     folders: [Folder]
@@ -32,7 +34,7 @@ const typeDefs = gql`
     login(username: String!, password: String!): User
 
     user(id: ID, username: String!, password: String!, nickname: String!): User
-    markdown(id: ID, title: String, content: String): Markdown
+    markdown(id: ID, title: String, content: String, text: String, folderId: ID): Markdown
     folder(id: ID, name: String, parentId: ID): Folder
   }
 `

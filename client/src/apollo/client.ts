@@ -1,10 +1,8 @@
 import { resolvers, typeDefs, defaults } from './resolvers';
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import gql from 'graphql-tag';
-
 const cache = new InMemoryCache({
-  dataIdFromObject: (obj) => obj.id
+  dataIdFromObject: (obj) => (obj.id || 'invalid')
 });
 const client = new ApolloClient({
   cache,

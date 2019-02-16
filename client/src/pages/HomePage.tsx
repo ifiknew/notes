@@ -18,8 +18,8 @@ const MENU_ICONS = [<EventNoteRounded />, <FolderOpenOutlined />, <Public />, <S
 export interface HomePageProps {
 }
 const CREATE_MARKDOWN = gql`
-  mutation createMarkdown($title: String, $content: String) {
-    markdown(title: $title, content: $content) {
+  mutation createMarkdown($title: String, $content: String, $text: String) {
+    markdown(title: $title, content: $content, text: $text) {
       id
     }
   }

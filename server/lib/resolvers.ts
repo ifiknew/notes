@@ -32,7 +32,7 @@ const resolvers: Resolvers = {
       console.log(authorization, user);
       
       if (!!authorization) {
-        return dataSources.Markdown.model.find({ userId: user.id })
+        return dataSources.Markdown.model.find({ userId: user.id }).sort({ 'updateTime': -1 })
       }
       return []
     },
@@ -59,7 +59,7 @@ const resolvers: Resolvers = {
     user: async (_: any, params, { dataSources, user }) => {
       const { id } = params
       if (id) {
-        return dataSources.User.model.findByIdAndUpdate(id, params).exec()
+        return dataSources.User.model.findByIdAndUpdate(id, params, { new: true }).exec()
       }
       return dataSources.User.model.create(params)
     },
@@ -69,9 +69,9 @@ const resolvers: Resolvers = {
         return dataSources.Markdown.model.findOneAndDelete({ _id: id }).exec()
       }
       if (id) {
-        return dataSources.Markdown.model.findByIdAndUpdate(id, {...params, updateTime: new Date().valueOf() }).exec()
+        return dataSources.Markdown.model.findByIdAndUpdate(id, {...params, updateTime: new Date().valueOf() }, { new: true }).exec()
       }
-      return dataSources.Markdown.model.create({ ...params, userId: user.id, createTime: new Date().valueOf() })
+      return dataSources.Markdown.model.create({ ...params, userId: user.id, createTime: new Date().valueOf(), updateTime: new Date().valueOf() })
     },
     folder: async (_: any, params, { dataSources, user }) => {
       const { id } = params
@@ -79,17 +79,17 @@ const resolvers: Resolvers = {
         return dataSources.Folder.model.findOneAndDelete({ _id: id }).exec()
       }
       if (id) {
-        return dataSources.Folder.model.findByIdAndUpdate(id, {...params, updateTime: new Date().valueOf() }).exec()
+        return dataSources.Folder.model.findByIdAndUpdate(id, {...params, updateTime: new Date().valueOf() }, { new: true }).exec()
       }
-      return dataSources.Folder.model.create({ ...params, userId: user.id, createTime: new Date().valueOf() })
+      return dataSources.Folder.model.create({ ...params, userId: user.id, createTime: new Date().valueOf(), updateTime: new Date().valueOf() })
     }
   },
   Folder: {
     folders: async (folder: IFolder, params, { dataSources, user }) => {
-      return dataSources.Folder.model.find({ parentId: folder.id, userId: user.id })
+      return dataSources.Folder.model.find({ parentId: folder.id, userId: user.id }).sort({ 'updateTime': 1 })
     },
     markdowns: async (folder: IFolder, params, { dataSources, user }) => {
-      return dataSources.Markdown.model.find({ folderId: folder.id, userId: user.id })
+      return dataSources.Markdown.model.find({ folderId: folder.id, userId: user.id }).sort({ 'updateTime': -1 })
     },
   }
 }

@@ -4,6 +4,7 @@ import { DataSource } from 'apollo-datasource';
 interface IMarkdown extends Document {
   title: string
   content: string,
+  text: string,
   userId: string,
   folderId: string,
   createTime: number,
@@ -13,6 +14,7 @@ interface IMarkdown extends Document {
 const schema = new Schema({
   title: SchemaTypes.String,
   content: SchemaTypes.String,
+  text: SchemaTypes.String,
   userId: SchemaTypes.ObjectId,
   folderId: SchemaTypes.ObjectId,
   createTime: SchemaTypes.Number,

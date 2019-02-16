@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import NoteItem from '../notes/NoteItem';
 import styles from './FoldersPage.module.scss'
-import { IconButton } from '@material-ui/core';
-import { CreateNewFolderRounded, CreateNewFolderOutlined, FolderOutlined, AddRounded } from '@material-ui/icons';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import { CreateNewFolderOutlined, FolderOutlined, AddRounded } from '@material-ui/icons';
 import FolderDialog from './dialog/FolderDialog';
-import { deepOrange } from '@material-ui/core/colors';
+import HeaderBar from '../../components/headerbar/HeaderBar';
+
 export interface FoldersPageProps {
 }
 class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps<{}>, any> {
   state = {
     paths: [],
-    showFolderDialog: false
+    showFolderDialog: false,
+    anchorFolderElement: null as HTMLElement | null,
+    anchorFolderId: null as string | null
   }
   static getDerivedStateFromProps = (nextProps: FoldersPageProps & RouteComponentProps<{}>) => {
     const { search } = nextProps.location
@@ -37,6 +40,7 @@ class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps
         query={gql`
           query folder($id:ID) {
             folder(id:$id) {
+              id
               folders {
                 id
                 name
@@ -44,7 +48,8 @@ class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps
               markdowns {
                 id
                 title
-                content
+                text
+                updateTime
               }
             }
           }
@@ -53,15 +58,69 @@ class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps
           id: currentFolderId
         }}
       >
-        {({ data, loading }) => data && data.folder ? (
+        {({ data, loading, refetch: refetchCurrentFolder }) => data && data.folder ? (
           <div className={styles.root}>
-            <div className={styles.headerBar}>
-              <IconButton >
-                <AddRounded color="primary" style={{ fill: deepOrange[500] }}/>
-              </IconButton>
-            </div>
+            <HeaderBar>
+              <div />
+              <div>
+                <IconButton onClick={() => this.setState({ showFolderDialog: true })}>
+                  <CreateNewFolderOutlined color="primary"/>
+                </IconButton>
+                <Mutation
+                  mutation={gql`
+                    mutation createMarkdown($folderId: ID) {
+                      markdown(title: "Write your title", content: "# Write your title", text: "To be Continued...", folderId: $folderId) {
+                        id
+                      }
+                    }
+                  `}
+                  variables={{
+                    folderId: currentFolderId
+                  }}
+                  refetchQueries={[{
+                    query: gql`
+                      query mds {
+                        markdowns {
+                          id
+                        }
+                      }
+                    `,
+                  }, {
+                    query: gql`
+                      query folder($id: ID) {
+                        folder(id:$id) {
+                          id
+                          markdowns {
+                            id
+                            title
+                            text
+                            updateTime
+                          }
+                        }
+                      }
+                    `,
+                    variables: {
+                      id: currentFolderId
+                    }
+                  }]}
+                >
+                  {(mutate) => (
+                    <IconButton onClick={() => mutate()}>
+                      <AddRounded color="primary"/>
+                    </IconButton>
+                  )}
+                </Mutation>
+              </div>
+            </HeaderBar>
             <div className={styles.label}>FOLDERS</div>
             <div className={styles.folderGroup}>
+              <Menu
+                anchorEl={this.state.anchorFolderElement}
+                open={Boolean(this.state.anchorFolderElement)}
+                onClose={() => this.setState({ anchorFolderElement: null })}
+              >
+                <MenuItem onClick={() => {}}>Delete</MenuItem>
+              </Menu>
               {data.folder.folders.map((folder: any) => (
                 <div 
                   className={styles.folder} 
@@ -72,7 +131,15 @@ class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps
                     } else {
                       this.props.history.push(`/folders?path=${folder.id}`)
                     }
-                  }}>
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault()
+                    this.setState({
+                      anchorFolderElement: e.target,
+                      anchorFolderId: folder.id
+                    })
+                  }}
+                >
                   <IconButton>
                     <FolderOutlined fontSize="large" />
                   </IconButton>
@@ -80,9 +147,6 @@ class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps
                 </div>
               ))}
               <div className={styles.folder}>
-                <IconButton onClick={() => this.setState({ showFolderDialog: true })}>
-                  <CreateNewFolderOutlined fontSize="large" />
-                </IconButton>
                 <div className={styles.text} style={{ color: 'transparent' }}>Create</div>
               </div>
             </div>
