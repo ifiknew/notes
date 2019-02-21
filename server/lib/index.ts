@@ -17,7 +17,8 @@ const server = new ApolloServer({
       }
     }
     return {}
-  }
+  },
+  tracing: true
 })
 
 server
