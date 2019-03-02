@@ -119,7 +119,38 @@ class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps
                 open={Boolean(this.state.anchorFolderElement)}
                 onClose={() => this.setState({ anchorFolderElement: null })}
               >
-                <MenuItem onClick={() => {}}>Delete</MenuItem>
+                <Mutation
+                  mutation={gql`
+                    mutation deleteDir($id: ID) {
+                      folder(id: $id) {
+                        id
+                      }
+                    }
+                  `}
+                  refetchQueries={[{
+                    query: gql`
+                      query folder($id: ID) {
+                        folder(id:$id) {
+                          id
+                          folders {
+                            id
+                          }
+                        }
+                      }
+                    `,
+                    variables: {
+                      id: currentFolderId
+                    }
+                  }]}
+                  onCompleted={() => {
+                    this.setState({
+                      anchorFolderElement: null,
+                      anchorFolderId: null
+                    })
+                  }}
+                >
+                  {(mutate) => <MenuItem onClick={() => mutate({ variables: { id: this.state.anchorFolderId } })}>Delete</MenuItem>}
+                </Mutation>
               </Menu>
               {data.folder.folders.map((folder: any) => (
                 <div 

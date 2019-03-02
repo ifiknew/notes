@@ -63,6 +63,7 @@ export default class FolderDialog extends React.Component<FolderDialogProps, any
               query: gql`
                 query folder($id:ID) {
                   folder(id:$id) {
+                    id
                     folders {
                       id
                       name
