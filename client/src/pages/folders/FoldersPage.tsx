@@ -158,7 +158,7 @@ class FoldersPage extends React.Component<FoldersPageProps & RouteComponentProps
                   key={folder.id} 
                   onClick={() => {
                     if (currentFolderId) {
-                      this.props.history.push(`${this.props.location.pathname}?${this.props.location.search}/${folder.id}`)
+                      this.props.history.push(`${this.props.location.pathname}${this.props.location.search}/${folder.id}`)
                     } else {
                       this.props.history.push(`/folders?path=${folder.id}`)
                     }
