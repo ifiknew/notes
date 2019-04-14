@@ -8,7 +8,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import client from '../../../apollo/client';
 
 
 export interface FolderDialogProps {
